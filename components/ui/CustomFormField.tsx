@@ -25,7 +25,8 @@ import {
   SelectContent,
   SelectTrigger,
   SelectValue,
-} from "@radix-ui/react-select";
+} from "@/components/ui/select";
+import { Textarea } from "./textarea";
 
 interface CustomProps {
   control: Control<any>;
@@ -77,6 +78,18 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
         </div>
       );
 
+    case FormFieldType.TEXTAREA:
+      return (
+        <FormControl>
+          <Textarea
+            placeholder={placeholder}
+            {...field}
+            className="shad-textArea"
+            disabled={props.disabled}
+          ></Textarea>
+        </FormControl>
+      );
+
     case FormFieldType.PHONE_INPUT:
       return (
         <FormControl>
@@ -118,24 +131,23 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
         </div>
       );
 
-    case FormFieldType.SKELETON:
-      return renderSkeleton ? renderSkeleton(field) : null;
-
     case FormFieldType.SELECT:
       return (
         <FormControl>
           <Select onValueChange={field.onChange} defaultValue={field.value}>
-            <FormControl>
-              <SelectTrigger className="shad-select-trigger">
-                <SelectValue placeholder={placeholder} />
-              </SelectTrigger>
-            </FormControl>
-            <SelectContent className="'shad-select-content">
+            <SelectTrigger className="shad-select-trigger" aria-hidden="false">
+              <SelectValue placeholder={placeholder} />
+            </SelectTrigger>
+            <SelectContent className="shad-select-content">
               {props.children}
             </SelectContent>
           </Select>
         </FormControl>
       );
+
+    case FormFieldType.SKELETON:
+      return renderSkeleton ? renderSkeleton(field) : null;
+
     default:
       break;
   }

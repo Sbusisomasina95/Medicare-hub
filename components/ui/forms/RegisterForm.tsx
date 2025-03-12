@@ -14,10 +14,11 @@ import { UserFormValidation } from "@/lib/validation";
 import { useRouter } from "next/navigation";
 import { createUser } from "@/lib/actions/patient.actions";
 import { FormFieldType } from "./PatientForm";
-import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
-import { Doctors, GenderOptions } from "@/constants";
-import { Label } from "@radix-ui/react-label";
-import { SelectItem } from "@radix-ui/react-select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Doctors, GenderOptions, IdentificationTypes } from "@/constants";
+import { Label } from "@/components/ui/label";
+import { SelectItem } from "@/components/ui/select";
+import FileUploader from "@/components/FileUploader";
 
 const RegisterForm = ({ user }: { user: User }) => {
   const router = useRouter();
@@ -119,8 +120,8 @@ const RegisterForm = ({ user }: { user: User }) => {
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
-                  {GenderOptions.map((option) => (
-                    <div key={option} className="radio-group">
+                  {GenderOptions.map((option, i) => (
+                    <div key={option + i} className="radio-group">
                       <RadioGroupItem value={option} id={option} />
                       <Label htmlFor={option} className="cursor-pointer">
                         {option}
@@ -179,8 +180,8 @@ const RegisterForm = ({ user }: { user: User }) => {
           fieldType={FormFieldType.SELECT}
           control={form.control}
           name="primaryPhysician"
-          label="Primary Physician"
-          placeholder=" Select  a Physician"
+          label="Primary care physician"
+          placeholder="Select a physician"
         >
           {Doctors.map((doctor) => (
             <SelectItem key={doctor.name} value={doctor.name}>
@@ -189,9 +190,8 @@ const RegisterForm = ({ user }: { user: User }) => {
                   src={doctor.image}
                   width={32}
                   height={32}
-                  alt={doctor.name}
-                  className="rounded-full
-                    border border-dark-500"
+                  alt="doctor"
+                  className="rounded-full border border-dark-500"
                 />
                 <p>{doctor.name}</p>
               </div>
@@ -199,7 +199,78 @@ const RegisterForm = ({ user }: { user: User }) => {
           ))}
         </CustomFormField>
 
-        <div className="flex flex-col gap-6 xl:flex-row"></div>
+        <div className="flex flex-col gap-6 xl:flex-row">
+          <CustomFormField
+            fieldType={FormFieldType.INPUT}
+            control={form.control}
+            name="insuranceProvider"
+            label="Insurance Provider"
+            placeholder=" Bonitas"
+          />
+
+          <CustomFormField
+            fieldType={FormFieldType.INPUT}
+            control={form.control}
+            name="insurancePolicyNumber"
+            label="insurance Policy Number"
+            placeholder="Bonitas1234"
+          />
+        </div>
+
+        <div className="flex flex-col gap-6 xl:flex-row">
+          <CustomFormField
+            fieldType={FormFieldType.TEXTAREA}
+            control={form.control}
+            name="allergies"
+            label="Allergies (if any)"
+            placeholder=" Peanuts, fish, pollen"
+          />
+
+          <CustomFormField
+            fieldType={FormFieldType.TEXTAREA}
+            control={form.control}
+            name="currentMedication"
+            label="Current Medication"
+            placeholder="Paracetamol 500mg"
+          />
+        </div>
+        <div className="flex flex-col gap-6 xl:flex-row">
+          <CustomFormField
+            fieldType={FormFieldType.TEXTAREA}
+            control={form.control}
+            name="familyMedicalHistory"
+            label="family Medical History"
+            placeholder=" Any"
+          />
+
+          <CustomFormField
+            fieldType={FormFieldType.TEXTAREA}
+            control={form.control}
+            name="pastMedicalHistory"
+            label="Past Medical History"
+            placeholder=" Any"
+          />
+        </div>
+
+        <section className="space-y-6">
+          <div className="mb-9 space-y-1">
+            <h2 className="sub-header">Identification and Verification</h2>
+          </div>
+        </section>
+
+        <CustomFormField
+          fieldType={FormFieldType.SELECT}
+          control={form.control}
+          name="identificationType"
+          label="Identification Type"
+          placeholder="Select identification type"
+        >
+          {IdentificationTypes.map((type) => (
+            <SelectItem key={type} value={type}>
+              {type}
+            </SelectItem>
+          ))}
+        </CustomFormField>
 
         <div className="flex flex-col gap-6 xl:flex-row"></div>
 
